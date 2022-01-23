@@ -1,0 +1,84 @@
+:root {
+  --midnight: #260e5f;
+  --blue: #5aa2e9;
+  --border-radius: .3rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  color: black;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin: 0;
+  color: black;
+  line-height: 1.25;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+.title {
+  color: white;
+  text-align: center;
+}
+
+.btn {
+  font-size: 1.5rem;
+  text-decoration:none;
+  padding: 6px 5px;
+  width: 100%;
+  display: block;
+  color: white;
+  border: none;
+  outline: none;
+  background-color: var(--blue);
+  box-shadow: 3px 3px black;
+}
+
+.hero {
+  background-color: var(--midnight);
+  color: white;
+  padding: 3% 4%;
+}
+
+/* card that contains Today's Weather values */
+.card-header {
+  color: black;
+  background-color: white;
+  padding: 2%;
+}
+
+.card-body {
+  padding: 2.5%;
+}
+
+/* form styling */
+.form-label,
+.form-input,
+.form-textarea {
+  display: block;
+}
+
+.form-label {
+  font-size: 1.3rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 3%;
+  margin: 5px 0;
+  font-size: 1.3rem;
+  border: 3px solid black;
+  border-radius: var(--border-radius);
+}
