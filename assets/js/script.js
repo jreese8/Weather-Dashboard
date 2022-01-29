@@ -2,31 +2,36 @@ var cityFormEl = document.querySelector("#city-form");
 
 var cityInputEl = document.querySelector("#city");
 
-var tempEl = document.querySelector("#temp");
+var tempsEl = document.querySelectorAll(".temp");
 
-var windEl = document.querySelector("#wind");
+var windsEl = document.querySelectorAll(".wind");
 
-var skiesEl = document.querySelector("#skies");
+var skiezEl = document.querySelectorAll(".skies");
 
-var humidityEl = document.querySelector("#humidity");
+var humiditysEl = document.querySelectorAll(".humidity");
 
-var uviEl = document.querySelector("#uvi");
+var uvisEl = document.querySelectorAll(".uvi");
 
 var citySearchTerm = document.querySelector("#city-search-term");
 
+var cityContainer = document.querySelector("#city-container");
+
 var cityCoordsEl = document.querySelector("#city-coords");
 
+var forecastEl = document.querySelector("#forecast");
+
 //Form to search for city coords
-var formSubmitHandler = function(event) {
+var searchButton = function(event) {
     // prevent page from refreshing
     event.preventDefault();
   
     // get value from input element
-    var cityCoords = cityInputEl.value.trim();
+    var cityName = cityInputEl.value.trim();
   
-    if (cityCoords) {
+    if (cityName) {
       //get today's forecast
       getCityCoords();
+      saveCity(cityName);
   
       cityInputEl.value = "";
       //5 day for cast is apart of onecall api
@@ -34,14 +39,32 @@ var formSubmitHandler = function(event) {
     } else {
       alert("Please enter a valid city name.");
     }
-  };
+};
 
-  ////////////////////////////////
-  // One day forecast functions //
-  ////////////////////////////////
+  var saveCity = function(cityName) {
+    
+    // retrieve cityNames item from localStorage. If none exist, return an empty array.
+    // cityNames is an array which holds the names of the cities I have recently searched
+    var cityMore = JSON.parse(localStorage.getItem("cityMore") || "[]");
+    console.log(cityMore);
+    
+    if (cityMore.length < 10) {
+        cityMore.unshift(cityName);   //adds cityName to front of array
+    } else {
+      cityMore.pop()                //removes last item from array
+      cityMore.unshift(cityName)    //adds cityName to front of array
+    }
+    // Sets current value of cityMore to local storage
+    localStorage.setItem("cityMore", JSON.stringify(cityMore));
 
-  var getCityCoords = function(){
-    console.log("city coords", cityInputEl.value);
+    //Write cities to the page
+    cityContainer.innerHTML = `city-container: ${cityMore}`;
+
+  }
+
+  var getCityCoords = function() {
+    //Stringify
+    //console.log("city coords", cityInputEl.value);
 
     //geo api ink, blue in link is template literal, is equivalent to + '' +
     var apiGeo = `http://api.openweathermap.org/geo/1.0/direct?q=${cityInputEl.value}&appid=447f6bda6a74a93f49f0ddcc0ca1d17c`;
@@ -52,31 +75,34 @@ var formSubmitHandler = function(event) {
 
     // request was successful
     if (response.ok) {
-      console.log(response);
+      //console.log(response);
 
       response.json().then(function(cityData) {
-      console.log("Coordinates", cityData);
+      //console.log("Coordinates", cityData);
 
       if (cityData.length > 0) {
         location.lon = cityData[0].lon;
-        console.log("Lon", location.lon);
+        //console.log("Lon", location.lon);
         location.lat = cityData[0].lat;
-        console.log("Lat", location.lat);
+       //console.log("Lat", location.lat);
 
       }
 
       getCityWeather(location.lat, location.lon);
-    });
+      
+      });
     
-    } else {
+      } else {
+
       alert("Error: " + response.statusText);
-    }
+      
+      }
   })
 };
   
   //gets the city weather
   var getCityWeather = function(lat, lon) {
-      console.log("get weather");
+      //console.log("get weather");
       //is calling for humidity, wind, weather, temp, uvi, & the 5 day forecast
     var apiOnecall = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely&appid=447f6bda6a74a93f49f0ddcc0ca1d17c&units=imperial";
 
@@ -86,93 +112,77 @@ var formSubmitHandler = function(event) {
 
         // request was successful
         if (response.ok) {
-          console.log("CW response", response);
+          //console.log("CW response", response);
 
           response.json().then(function(weatherdata) {
-          console.log("Weather", weatherdata);
+          //console.log("Weather Data", weatherdata);
 
-          //Displays weather data with parameter of weatherdata
-          formatWeatherData(weatherdata);
+          var forecast = [];
+
+          for (var i = 0; i < 6; i++) {
+          // get temp, weather, wind speed, humidity, & uvi
+
+            var temp = weatherdata["daily"][i]["temp"]
+            var humidity = weatherdata["daily"][i]["humidity"]
+            var wind = weatherdata["daily"][i]["wind_speed"]
+            //weather is an array
+            var skies = weatherdata["daily"][i]["weather"][0]["main"]
+            var uvi = weatherdata["daily"][i]["uvi"]
         
-         // get 5 day forecast
-         getFiveForecast(weatherdata);
-        });
+            // this is the resulting data for each day's forecast
+            var dailyResult = {
+                //right side of colon is changing, daily value
+                //left is a key
+                "temp":temp,
+                "humidity":humidity,
+                "wind":wind,
+                "skies":skies,
+                "uvi":uvi
+            }
+
+            //alternative as an array
+            //var dailyResult = [temp, humidity, wind, skies, uvi]
+
+            //Accumulator
+              forecast.push(dailyResult);
+
+            }
+
+            //console.log('FORECAST', forecast);
+
+            //Displays weather data with parameter of weatherdata
+            displayForecast(forecast);
         
-      //  } else {
-      //    alert("Error: " + response.statusText);
-        }
+
+            });
+          }
       })
   };
+
+    //use a loop to display forecast.
+   // give divs id= 1-6 etc for each value of day in loop
+
   
-  var displayWeather = function(temp, humidity, wind, skies, uvi) {
-   tempEl.innerHTML= `temp: ${temp} F`;
-   windEl.innerHTML= `wind: ${wind} MPH`;
-   skiesEl.innerHTML= `skies: ${skies}`;
-   humidityEl.innerHTML= `humidity: ${humidity}`;
-   uviEl.innerHTML= `uvi: ${uvi}`;
-  }
-
-  var formatWeatherData = function(weatherdata) {
-    console.log(weatherdata["current"]["temp"], weatherdata["current"]["humidity"], weatherdata["current"]["wind_speed"], weatherdata["current"]["weather"][0]["main"], weatherdata["current"]["uvi"]);
-    
-    var temp = weatherdata["current"]["temp"]
-    var humidity = weatherdata["current"]["humidity"]
-    var wind = weatherdata["current"]["wind_speed"]
-    //weather is an array
-    var skies = weatherdata["current"]["weather"][0]["main"]
-    var uvi = weatherdata["current"]["uvi"]
-
-    displayWeather(temp, humidity, wind, skies, uvi);
+var displayForecast = function(forecast) {
   
-  }
+  // i is the current iteration of the loop. tempsEl.length works for all bc they're all the same length. They're all the same day.
+  // for (var i = 0; i < 6; i++)
 
-  /////////////////////////////////
-  // five day forecast functions //
-  /////////////////////////////////
-  var getFiveForecast = function(weatherdata) {
-    console.log(weatherdata, "forecast");
-    
-    var fiveForecast = [];
+  for (var i = 0; i < tempsEl.length; i++) {
 
-    for (var i = 1; i < 6; i++) {
-    // get temp, weather, wind speed, humidity, & uvi
-
-        var temp = weatherdata["daily"][i]["temp"]
-        var humidity = weatherdata["daily"][i]["humidity"]
-        var wind = weatherdata["daily"][i]["wind_speed"]
-         //weather is an array
-        var skies = weatherdata["daily"][i]["weather"][0]["main"]
-        var uvi = weatherdata["daily"][i]["uvi"]
-        
-        // this is the resulting data for each day's forecast
-       var dailyResult = {
-          //right side of colon is changing, daily value
-          //left is a key
-          "temp":temp,
-          "humidity":humidity,
-          "wind":wind,
-          "skies":skies,
-          "uvi":uvi
-        }
-
-        //alternative as an array
-        //var dailyResult = [temp, humidity, wind, skies, uvi]
-
-        //Accumulator
-        fiveForecast.push(dailyResult);
-
-    }
-
-    console.log('FIVE DAY FORECAST', fiveForecast);
-
-    //use a loop to display five forecast.
-   // give divs id= 0,1 etc for each value of day in loop
+    tempsEl[i].innerHTML= `temp: ${forecast[i].temp.day} F`;
+    windsEl[i].innerHTML= `wind: ${forecast[i].wind} MPH`;
+    skiezEl[i].innerHTML= `skies: ${forecast[i].skies}`;
+    humiditysEl[i].innerHTML= `humidity: ${forecast[i].humidity}`;
+    uvisEl[i].innerHTML= `uvi: ${forecast[i].uvi}`;
 
   }
-  
+};
+
+
   // makes divs in the html to display data
   //change uv color
   //Stringify data for local storage JSON.parse(localStorage.getItem(""));
   
   // add event listeners to form
-  cityFormEl.addEventListener("submit", formSubmitHandler);
+  cityFormEl.addEventListener("submit", searchButton);
