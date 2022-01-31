@@ -5,7 +5,7 @@ A simple weather dashboard that displays the weather of the city entered for the
 The weather data that is displayed are: temperature, wind speed, skies, humidity, and the UV index.
 
 ## Website
-
+https://jreese8.github.io/Weather-Dashboard/
 
 ## Screenshot
 <img src="./assets/images/wdsc.png">
