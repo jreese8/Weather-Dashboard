@@ -11,71 +11,53 @@
 
 </head>
 
-<body class="flex-column min-100-vh">
+<body>
 
-    <header class="hero">
-    <h1 class="app-title">Weather Dashboard</h1>
-    </header>
+    <div class="row min-vh-100 no-gutters">
 
-    <main class="flex row justify-space-between">
+            <header class="hero">
 
-    <div class="col-12 col-md-4">
+                <h2 class="title">Weather Dashboard</h2>
+
+                    <p class = "subtitle">Search for a City</p>
       
-        <div class="card">
-            <h3 class="card-header">Search for a City</h3>
+                    <div class="col-12 col-lg-3 sticky-top d-flex flex-column">
 
-            <form id="city-form" class="card-body">
+                        <form id="city-form" class="card-body">
 
-                <label class="form-label" for="city"></label>
+                        <label class="form-label" for="city"></label>
 
-                <input city="city" id="city" type="text" autofocus="true" class="form-input"/>
+                        <input city="city" id="city" type="text" autofocus="true" class="form-input"/>
 
-                <button type="submit" class="btn">Search</button>
+                        <button type="submit" class="btn">Search</button>
 
-            </form>
+                        </form>
+
+                        <div class="col-12 col-md-8" id="city-container">Recent Searches;</div>
+
+                    </div>
+
+            </header>
+
+        <main class="col-12 col-lg-9 d-flex flex-column">
+
+        <div class="m-4 row">
+
+            <div class="col-12 rowz">
+
+                <h3 id="current">Current Day</h3>
+
+                <div class="temp">temp;</div>
+                <div class="wind">wind;</div>
+                <div class="skies">skies;</div>
+                <div class="humidity">humidity;</div>
+                <div class="uvi">uvi;</div>
+
+            </div>
 
         </div>
 
-    </div>
-
-    <div id="city-container">Recent Searches;</div>
-
-        <div class="col-12 col-md-8">
-
-            <h2 id="city-search-term"></h2>
-            <div class="temp">temp;</div>
-            <div class="wind">wind;</div>
-            <div class="skies">skies;</div>
-            <div class="humidity">humidity;</div>
-            <div class="uvi">uvi;</div>
-        
-        </div>
-
-        <div class="col-8 col-md-4 d-flex">
-
-            <div class="temp">temp;</div>
-            <div class="wind">wind;</div>
-            <div class="skies">skies;</div>
-            <div class="humidity">humidity;</div>
-            <div class="uvi">uvi;</div>
-
-            <div class="temp">temp;</div>
-            <div class="wind">wind;</div>
-            <div class="skies">skies;</div>
-            <div class="humidity">humidity;</div>
-            <div class="uvi">uvi;</div>
-
-            <div class="temp">temp;</div>
-            <div class="wind">wind;</div>
-            <div class="skies">skies;</div>
-            <div class="humidity">humidity;</div>
-            <div class="uvi">uvi;</div>
-
-            <div class="temp">temp;</div>
-            <div class="wind">wind;</div>
-            <div class="skies">skies;</div>
-            <div class="humidity">humidity;</div>
-            <div class="uvi">uvi;</div>
+        <div class="m-4 row justify-content-around">
 
             <div class="temp">temp;</div>
             <div class="wind">wind;</div>
@@ -85,7 +67,49 @@
 
         </div>
 
+        <div class="m-4 row justify-content-around rowz">
+
+            <div class="temp">temp;</div>
+            <div class="wind">wind;</div>
+            <div class="skies">skies;</div>
+            <div class="humidity">humidity;</div>
+            <div class="uvi">uvi;</div>
+
+        </div>
+
+        <div class="m-4 row justify-content-around">
+
+            <div class="temp">temp;</div>
+            <div class="wind">wind;</div>
+            <div class="skies">skies;</div>
+            <div class="humidity">humidity;</div>
+            <div class="uvi">uvi;</div>
+
+        </div>
+
+        <div class="m-4 row justify-content-around rowz">
+
+            <div class="temp">temp;</div>
+            <div class="wind">wind;</div>
+            <div class="skies">skies;</div>
+            <div class="humidity">humidity;</div>
+            <div class="uvi">uvi;</div>
+
+        </div>
+
+        <div class="m-4 row justify-content-around">
+
+            <div class="temp">temp;</div>
+            <div class="wind">wind;</div>
+            <div class="skies">skies;</div>
+            <div class="humidity">humidity;</div>
+            <div class="uvi">uvi;</div>
+            
+        </div>
+       
     </main>
+
+</div>
     
     <script src="./assets/js/script.js"></script>
     

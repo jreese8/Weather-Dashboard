@@ -14,7 +14,7 @@ var uvisEl = document.querySelectorAll(".uvi");
 
 var citySearchTerm = document.querySelector("#city-search-term");
 
-var cityContainer = document.querySelector("#city-container");
+var cityContainerEl = document.querySelector("#city-container");
 
 var cityCoordsEl = document.querySelector("#city-coords");
 
@@ -43,27 +43,25 @@ var searchButton = function(event) {
 
   var saveCity = function(cityName) {
     
-    // retrieve cityNames item from localStorage. If none exist, return an empty array.
-    // cityNames is an array which holds the names of the cities I have recently searched
+    // retrieve cityName item from localStorage. If none exist, return an empty array.
+    // cityMore is an array which holds the names of the cities have been recently searched.
     var cityMore = JSON.parse(localStorage.getItem("cityMore") || "[]");
     console.log(cityMore);
     
-    if (cityMore.length < 10) {
+    if (cityMore.length < 5) {        //max of 5 city names displayed
         cityMore.unshift(cityName);   //adds cityName to front of array
     } else {
       cityMore.pop()                //removes last item from array
       cityMore.unshift(cityName)    //adds cityName to front of array
     }
+
     // Sets current value of cityMore to local storage
     localStorage.setItem("cityMore", JSON.stringify(cityMore));
 
-    //Write cities to the page
-    cityContainer.innerHTML = `city-container: ${cityMore}`;
-
-  }
+    cityContainerEl.innerHTML = `${cityMore}`;
+};
 
   var getCityCoords = function() {
-    //Stringify
     //console.log("city coords", cityInputEl.value);
 
     //geo api ink, blue in link is template literal, is equivalent to + '' +
@@ -158,15 +156,11 @@ var searchButton = function(event) {
           }
       })
   };
-
-    //use a loop to display forecast.
-   // give divs id= 1-6 etc for each value of day in loop
-
   
 var displayForecast = function(forecast) {
   
-  // i is the current iteration of the loop. tempsEl.length works for all bc they're all the same length. They're all the same day.
-  // for (var i = 0; i < 6; i++)
+  // i is the current iteration of the loop. tempsEl.length works for all because they're all the same length; they're all the same day.
+  // for (var i = 0; i < 6; i++) is equivalent since tempsEl.length is just a number.
 
   for (var i = 0; i < tempsEl.length; i++) {
 
@@ -178,11 +172,6 @@ var displayForecast = function(forecast) {
 
   }
 };
-
-
-  // makes divs in the html to display data
-  //change uv color
-  //Stringify data for local storage JSON.parse(localStorage.getItem(""));
   
   // add event listeners to form
   cityFormEl.addEventListener("submit", searchButton);
